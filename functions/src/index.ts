@@ -1,12 +1,12 @@
 import axios, {AxiosResponse} from "axios";
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {Request} from "firebase-functions/lib/providers/https";
-import {Response} from "express";
+import {Request, Response} from "express";
 import {PullRequestInfo} from "./type/PullRequestInfo";
 import DataSnapshot = admin.database.DataSnapshot;
+import {BitbucketPayload} from "./type/BitbucketPayload";
 
-const webhooksUrl: string = 'https://chat.googleapis.com/v1/spaces/YYYYYYY/messages?key=xxxxxxxxx';
+const webhooksUrl = 'https://chat.googleapis.com/v1/spaces/YYYYYYY/messages?key=xxxxxxxxx';
 
 admin.initializeApp();
 
@@ -19,7 +19,8 @@ function pushToGoogleChat(message: string, dispatch?: (arg: string) => void, thr
     }).then((googleRes: AxiosResponse) => {
         if (dispatch)
             dispatch(googleRes.data.thread.name);
-    }).catch((e: any) => {
+        return;
+    }).catch((e) => {
         console.log(e)
     });
 }
@@ -28,8 +29,8 @@ function getSaveDispatchByPullRequestId(pullRequestId: string) {
     return (threadId: string) => {
         admin.database().ref('chatThread').child(pullRequestId).set({
             threadId: threadId.toString()
-        }).then(() => {
-            console.log("Save thread id : " + threadId);
+        }).catch((e) => {
+            console.log(e)
         });
     }
 }
@@ -37,7 +38,7 @@ function getSaveDispatchByPullRequestId(pullRequestId: string) {
 function getThreadIdByPullRequestId(pullRequestId: string, dispatch: (snapshot: DataSnapshot) => void) {
     admin.database().ref('chatThread').child(pullRequestId).child('threadId')
         .once('value', dispatch)
-        .catch((e: any) => {
+        .catch((e) => {
             console.log(e)
         });
 }
@@ -45,12 +46,12 @@ function getThreadIdByPullRequestId(pullRequestId: string, dispatch: (snapshot: 
 function removeThreadByRequestId(pullRequestId: string) {
     admin.database().ref('chatThread').child(pullRequestId).child('threadId')
         .set(null)
-        .catch((e: any) => {
+        .catch((e) => {
             console.log(e)
         });
 }
 
-function extractPullRequestInfo(requestBody: any): PullRequestInfo {
+function extractPullRequestInfo(requestBody: BitbucketPayload): PullRequestInfo {
     return {
         actor: requestBody.actor.display_name.trim(),
         pullRequestTitle: requestBody.pullrequest.title.trim(),

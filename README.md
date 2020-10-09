@@ -14,7 +14,6 @@ using [Firebase](https://firebase.google.com) functions.
     ```$bash
     firebase init
     //select `Database` and `Functions`
-    
     ```
 4. Deploy!!
     ```$bash

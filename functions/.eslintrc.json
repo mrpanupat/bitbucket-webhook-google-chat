@@ -1,4 +1,5 @@
 {
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     // Required for certain syntax usages
     "ecmaVersion": 8
@@ -6,7 +7,7 @@
   "plugins": [
     "promise"
   ],
-  "extends": "eslint:recommended",
+  "extends": "plugin:@typescript-eslint/recommended",
   "rules": {
     // Removed rule "disallow the use of console" from recommended eslint rules
     "no-console": "off",
