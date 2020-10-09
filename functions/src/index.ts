@@ -68,7 +68,8 @@ function pullRequestCreated(req: Request) {
         'Title :     ' + pullRequestInfo.pullRequestTitle + '\n' +
         'Branch : ' + pullRequestInfo.sourceBranch + '   >   ' + pullRequestInfo.destinationBranch + '\n' +
         'Author : _' + pullRequestInfo.actor + '_\n' +
-        'Link :     <' + pullRequestInfo.pullRequestUrl + '|' + pullRequestInfo.pullRequestUrl + '>';
+        'Link :     <' + pullRequestInfo.pullRequestUrl + '|' + pullRequestInfo.pullRequestUrl + '>\n' +
+        'มีออเดอร์ใหม่เข้ามา คุณต้องเร่งมือแล้วนะครับ';
     pushToGoogleChat(message, getSaveDispatchByPullRequestId(pullRequestInfo.pullRequestId));
 }
 
@@ -84,7 +85,9 @@ function pullRequestUpdated(req: Request) {
 
 function pullRequestCommented(req: Request) {
     const pullRequestInfo: PullRequestInfo = extractPullRequestInfo(req.body);
-    const message = '_' + pullRequestInfo.actor + '_ has Commented.';
+    const message =
+        '_' + pullRequestInfo.actor + '_ has Commented.\n' +
+        'เชฟเตือนแล้วนะ!';
 
     getThreadIdByPullRequestId(pullRequestInfo.pullRequestId, (data: DataSnapshot) => {
         if (data.val())
@@ -94,7 +97,9 @@ function pullRequestCommented(req: Request) {
 
 function pullRequestApproved(req: Request) {
     const pullRequestInfo: PullRequestInfo = extractPullRequestInfo(req.body);
-    const message = '_' + pullRequestInfo.actor + '_ has Approved.';
+    const message =
+        '_' + pullRequestInfo.actor + '_ has Approved.\n' +
+        'ให้ผ่านครับเชฟ';
 
     getThreadIdByPullRequestId(pullRequestInfo.pullRequestId, (data: DataSnapshot) => {
         if (data.val())
@@ -104,7 +109,8 @@ function pullRequestApproved(req: Request) {
 
 function pullRequestUnapproved(req: Request) {
     const pullRequestInfo: PullRequestInfo = extractPullRequestInfo(req.body);
-    const message = '_' + pullRequestInfo.actor + '_ has Unapproved.';
+    const message = '_' + pullRequestInfo.actor + '_ has Unapproved.\n' +
+        'คุณต้องตั้งสติและรีบแก้ปัญหาเฉพาะหน้านะครับ';
 
     getThreadIdByPullRequestId(pullRequestInfo.pullRequestId, (data: DataSnapshot) => {
         if (data.val())
@@ -114,7 +120,9 @@ function pullRequestUnapproved(req: Request) {
 
 function pullRequestMerged(req: Request) {
     const pullRequestInfo: PullRequestInfo = extractPullRequestInfo(req.body);
-    const message = '_' + pullRequestInfo.actor + '_ has Merged.';
+    const message =
+        '_' + pullRequestInfo.actor + '_ has Merged.\n' +
+        'เสริฟอาหารแล้วครับเชฟ';
 
     getThreadIdByPullRequestId(pullRequestInfo.pullRequestId, (data: DataSnapshot) => {
         if (data.val())
@@ -126,7 +134,9 @@ function pullRequestMerged(req: Request) {
 
 function pullRequestDeclined(req: Request) {
     const pullRequestInfo: PullRequestInfo = extractPullRequestInfo(req.body);
-    const message = '_' + pullRequestInfo.actor + '_ has Declined.';
+    const message =
+        '_' + pullRequestInfo.actor + '_ has Declined.\n' +
+        'ออเดอร์โดนยกเลิกแล้วครับเชฟ';
 
     getThreadIdByPullRequestId(pullRequestInfo.pullRequestId, (data: DataSnapshot) => {
         if (data.val())
