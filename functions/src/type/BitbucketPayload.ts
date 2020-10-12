@@ -1,6 +1,7 @@
 export interface BitbucketPayload {
     actor: Actor;
     pullrequest: PullRequest;
+    repository: Repository;
 }
 
 interface Actor {
@@ -12,6 +13,10 @@ interface PullRequest {
     links: Links;
     destination: BranchInfo;
     source: BranchInfo;
+}
+
+interface Repository {
+    name: string;
 }
 
 interface Links {

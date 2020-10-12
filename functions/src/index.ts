@@ -53,6 +53,7 @@ function removeThreadByRequestId(pullRequestId: string) {
 
 function extractPullRequestInfo(requestBody: BitbucketPayload): PullRequestInfo {
     return {
+        name: requestBody.repository.name.trim(),
         actor: requestBody.actor.display_name.trim(),
         pullRequestTitle: requestBody.pullrequest.title.trim(),
         pullRequestId: requestBody.pullrequest.links.html.href.split("/bitbucket.org/")[1],
@@ -65,6 +66,7 @@ function extractPullRequestInfo(requestBody: BitbucketPayload): PullRequestInfo 
 function pullRequestCreated(req: Request) {
     const pullRequestInfo: PullRequestInfo = extractPullRequestInfo(req.body);
     const message: string = '<users/all>\n' +
+        'Repo : ' + pullRequestInfo.name + '\n' +
         'Title :     ' + pullRequestInfo.pullRequestTitle + '\n' +
         'Branch : ' + pullRequestInfo.sourceBranch + '   >   ' + pullRequestInfo.destinationBranch + '\n' +
         'Author : _' + pullRequestInfo.actor + '_\n' +
